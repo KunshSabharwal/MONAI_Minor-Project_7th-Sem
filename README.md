@@ -4,10 +4,10 @@ Deep learning project for **4-class brain tumor classification from MRI images**
 
 ## 🟠 Models
 
-- **MONAI DenseNet121** — CNN-based classifier
-- **ViT-Base (`vit_base_patch16_224`)** — Transformer-based classifier
-- **Grad-CAM** — explanation method for DenseNet121
-- **Patch-level relevance (Gradient × Activation)** — XAI method for ViT
+- **MONAI DenseNet121**: CNN-based classifier
+- **ViT-Base (`vit_base_patch16_224`)**: Transformer-based classifier
+- **Grad-CAM**: explanation method for DenseNet121
+- **Patch-level relevance (Gradient × Activation)**: XAI method for ViT
 
 ## 🏛️ Classes
 
