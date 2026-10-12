@@ -1,13 +1,22 @@
 # 🧠 An Explainable MONAI-Based Deep Learning Framework for Multi-Class Brain Tumor Classification from MRI Images
 
-Deep learning project for **4-class brain tumor classification from MRI images**, comparing a CNN-based model with a Vision Transformer and using Explainable AI (XAI) to visualize model predictions.
+A deep learning research project for **4-class brain tumor classification from MRI images**, comparing CNNs and Vision Transformers and exploring Explainable AI (XAI) techniques.
 
 ## 🟠 Models
 
 - **MONAI DenseNet121**: CNN-based classifier
-- **ViT-Base (`vit_base_patch16_224`)**: Transformer-based classifier
-- **Grad-CAM**: explanation method for DenseNet121
-- **Patch-level relevance (Gradient × Activation)**: XAI method for ViT
+- **MONAI EfficientNet**: CNN-based classifier
+- **ViT-Base (timm)**: Vision Transformer classifier
+- **ViT (MONAI)**: Vision Transformer classifier
+- **Swin Transformer-Tiny (timm)**: Swin Transformer classifier
+- **Custom CNN + ViT Hybrid**: Proposed hybrid architecture; implementation and training are planned
+
+### Explainable AI (XAI)
+
+- **Grad-CAM**: Planned for conventional CNN-based models, including DenseNet121 and EfficientNet.
+- **Attention Rollout**: Planned for transformer-based models, including ViT and Swin Transformer.
+
+> The transformer-based Attention Rollout implementation is not yet complete. MONAI Swin Transformer training has not been completed, and the proposed CNN + ViT hybrid has not yet been implemented or evaluated.
 
 ## 🏛️ Classes
 
@@ -53,16 +62,33 @@ MRI Image
     ↓
 Preprocessing (224 × 224)
     ↓
-┌───────────────────┬───────────────────┐
-│   DenseNet121     │        ViT         │
-│      (MONAI)      │      (timm)        │
-└─────────┬─────────┴─────────┬─────────┘
-          ↓                   ↓
-     Prediction           Prediction
-          ↓                   ↓
-       Grad-CAM         Patch Relevance
-          ↓                   ↓
-      XAI Heatmap        XAI Heatmap
+┌──────────────────┬──────────────────┬──────────────────┐
+│   DenseNet121    │    EfficientNet   │    ViT-Base      │
+│     (MONAI)      │      (MONAI)      │     (timm)       │
+└────────┬─────────┴────────┬─────────┴────────┬─────────┘
+         ↓                  ↓                  ↓
+    Prediction         Prediction         Prediction
+         ↓                  ↓                  ↓
+       Grad-CAM           Grad-CAM       Attention Rollout
+         (Planned)          (Planned)          (Planned)
+
+                  ViT (MONAI)
+                       ↓
+                  Prediction
+                       ↓
+                Attention Rollout
+                    (Planned)
+
+             Swin Transformer-Tiny
+                     (timm)
+                       ↓
+                  Prediction
+                       ↓
+                Attention Rollout
+                    (Planned)
+
+         Proposed Custom CNN + ViT Hybrid
+                (Planned, not trained)
 ```
 
 ## 📊 Evaluation
@@ -76,27 +102,31 @@ Models are evaluated using:
 - Confusion Matrix
 - Classification Report
 
-| Model       | Accuracy | Precision |   Recall |       F1 |
-| ----------- | -------: | --------: | -------: | -------: |
-| DenseNet121 | `94.72%` |  `95.22%` | `94.72%` | `94.63%` |
-| ViT-Base    | `97.97%` |  `98.01%` | `97.97%` | `97.97%` |
+| Model                   | Accuracy | Precision |  Recall | F1-score |
+| ----------------------- | -------: | --------: | ------: | -------: |
+| DenseNet121 (MONAI)     |   94.72% |    95.22% |  94.72% |   94.63% |
+| ViT-Base (timm)         |   97.97% |    98.01% |  97.97% |   97.97% |
+| ViT (MONAI)             |   80.08% |    84.40% |  80.08% |   75.71% |
+| EfficientNet (MONAI)    |   78.46% |    80.82% |  78.46% |   76.69% |
+| Swin Transformer (timm) |  100.00% |   100.00% | 100.00% |  100.00% |
+
+> Note: These are the currently reported results. The 100% Swin Transformer result has not been independently verified. Further checks for data leakage, split independence, and evaluation correctness are necessary before drawing conclusions. Results across implementations may also differ because of pretrained weights, preprocessing, and training configurations.
 
 ## 🔎 Explainable AI
 
-### DenseNet121
+### Grad-CAM for CNN-Based Models
 
-Grad-CAM is applied to the final DenseNet feature block to generate spatial heatmaps showing regions associated with the predicted class.
+Grad-CAM is planned for conventional CNN-based architectures such as DenseNet121 and EfficientNet. It will generate spatial heatmaps highlighting image regions that contribute to a model's predictions.
 
-### ViT
+### Attention Rollout for Transformer-Based Models
 
-The ViT divides the 224 × 224 image into 16 × 16 patches:
+Attention Rollout is planned for transformer-based architectures, including ViT and Swin Transformer. The implementation and visualization pipeline have not yet been completed.
 
-```text
-224 / 16 = 14
-14 × 14 = 196 patches
-```
+Swin Transformer uses hierarchical, window-based attention, so its explanation method will need to account for its architecture.
 
-Patch-level relevance is calculated from gradient × activation, producing a 14 × 14 relevance map that is resized and overlaid on the MRI.
+### Proposed CNN + ViT Hybrid
+
+A custom CNN branch and a ViT branch will be combined through feature fusion for four-class classification. The architecture, training, evaluation, and suitable XAI methods remain future work.
 
 ## 📩 Installation
 
@@ -106,14 +136,7 @@ Create the environment from the provided `environment.yml`:
 
 ```bash
 conda env create -f environment.yml
-conda activate brain-tumor
-```
-
-If the environment already exists:
-
-```bash
-conda env update -f environment.yml --prune
-conda activate brain-tumor
+conda activate monai
 ```
 
 ### Option 2: Python Virtual Environment
