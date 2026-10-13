@@ -9,14 +9,15 @@ A deep learning research project for **4-class brain tumor classification from M
 - **ViT-Base (timm)**: Vision Transformer classifier
 - **ViT (MONAI)**: Vision Transformer classifier
 - **Swin Transformer-Tiny (timm)**: Swin Transformer classifier
-- **Custom CNN + ViT Hybrid**: Proposed hybrid architecture; implementation and training are planned
+- **Swin Transformer (MONAI)**: Swin Transformer classifier `not able to train to heavy`
+- **Custom CNN + ViT Hybrid**: Hybrid architecture
 
 ### Explainable AI (XAI)
 
 - **Grad-CAM**: Planned for conventional CNN-based models, including DenseNet121 and EfficientNet.
 - **Attention Rollout**: Planned for transformer-based models, including ViT and Swin Transformer.
 
-> The transformer-based Attention Rollout implementation is not yet complete. MONAI Swin Transformer training has not been completed, and the proposed CNN + ViT hybrid has not yet been implemented or evaluated.
+> The transformer-based Attention Rollout implementation is not yet complete. MONAI Swin Transformer training has not been completed.
 
 ## 🏛️ Classes
 
@@ -55,42 +56,6 @@ data/
             └── test/
 ```
 
-## 🛳️ Pipeline
-
-```text
-MRI Image
-    ↓
-Preprocessing (224 × 224)
-    ↓
-┌──────────────────┬──────────────────┬──────────────────┐
-│   DenseNet121    │    EfficientNet   │    ViT-Base      │
-│     (MONAI)      │      (MONAI)      │     (timm)       │
-└────────┬─────────┴────────┬─────────┴────────┬─────────┘
-         ↓                  ↓                  ↓
-    Prediction         Prediction         Prediction
-         ↓                  ↓                  ↓
-       Grad-CAM           Grad-CAM       Attention Rollout
-         (Planned)          (Planned)          (Planned)
-
-                  ViT (MONAI)
-                       ↓
-                  Prediction
-                       ↓
-                Attention Rollout
-                    (Planned)
-
-             Swin Transformer-Tiny
-                     (timm)
-                       ↓
-                  Prediction
-                       ↓
-                Attention Rollout
-                    (Planned)
-
-         Proposed Custom CNN + ViT Hybrid
-                (Planned, not trained)
-```
-
 ## 📊 Evaluation
 
 Models are evaluated using:
@@ -102,13 +67,15 @@ Models are evaluated using:
 - Confusion Matrix
 - Classification Report
 
-| Model                   | Accuracy | Precision |  Recall | F1-score |
-| ----------------------- | -------: | --------: | ------: | -------: |
-| DenseNet121 (MONAI)     |   94.72% |    95.22% |  94.72% |   94.63% |
-| ViT-Base (timm)         |   97.97% |    98.01% |  97.97% |   97.97% |
-| ViT (MONAI)             |   80.08% |    84.40% |  80.08% |   75.71% |
-| EfficientNet (MONAI)    |   78.46% |    80.82% |  78.46% |   76.69% |
-| Swin Transformer (timm) |  100.00% |   100.00% | 100.00% |  100.00% |
+| Model                    | Accuracy | Precision |  Recall | F1-score |
+| ------------------------ | -------: | --------: | ------: | -------: |
+| DenseNet121 (MONAI)      |   94.72% |    95.22% |  94.72% |   94.63% |
+| ViT-Base (timm)          |   97.97% |    98.01% |  97.97% |   97.97% |
+| ViT (MONAI)              |   80.08% |    84.40% |  80.08% |   75.71% |
+| EfficientNet (MONAI)     |   78.46% |    80.82% |  78.46% |   76.69% |
+| Swin Transformer (timm)  |  100.00% |   100.00% | 100.00% |  100.00% |
+| Swin Transformer (MONAI) |      N/A |       N/A |     N/A |      N/A |
+| Custom CNN + ViT Hybrid  |   89.02% |    91.24% |  89.02% |   88.38% |
 
 > Note: These are the currently reported results. The 100% Swin Transformer result has not been independently verified. Further checks for data leakage, split independence, and evaluation correctness are necessary before drawing conclusions. Results across implementations may also differ because of pretrained weights, preprocessing, and training configurations.
 
@@ -123,10 +90,6 @@ Grad-CAM is planned for conventional CNN-based architectures such as DenseNet121
 Attention Rollout is planned for transformer-based architectures, including ViT and Swin Transformer. The implementation and visualization pipeline have not yet been completed.
 
 Swin Transformer uses hierarchical, window-based attention, so its explanation method will need to account for its architecture.
-
-### Proposed CNN + ViT Hybrid
-
-A custom CNN branch and a ViT branch will be combined through feature fusion for four-class classification. The architecture, training, evaluation, and suitable XAI methods remain future work.
 
 ## 📩 Installation
 
