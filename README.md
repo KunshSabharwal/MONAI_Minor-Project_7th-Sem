@@ -9,7 +9,7 @@ A deep learning research project for **4-class brain tumor classification from M
 - **ViT-Base (timm)**: Vision Transformer classifier
 - **ViT (MONAI)**: Vision Transformer classifier
 - **Swin Transformer-Tiny (timm)**: Swin Transformer classifier
-- **Swin Transformer (MONAI)**: Swin Transformer classifier `not able to train to heavy`
+- **Swin Transformer (MONAI)**: Swin Transformer classifier `not able to as training is too heavy`
 - **Custom CNN + ViT Hybrid**: Hybrid architecture
 
 ### Explainable AI (XAI)
